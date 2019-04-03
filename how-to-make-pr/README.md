@@ -1,5 +1,10 @@
 # github PR made easy
 
+There are two sections to this document.
+
+1. The `github-make-pr-branch` tool is presented, which is what you will want to use to make any future PRs
+2. If you are unfamiliar with Pull Request on github process the second part of this document goes into all the details to help you understand what needs to be done. And once you understood, you will no longer need to know the details since `github-make-pr-branch` will do all the work for you.
+
 <!--ts-->
 
 Table of Contents
