@@ -43,7 +43,7 @@ chmod a+x github-make-pr-branch
 ./github-make-pr-branch https your-github-username repo_username repo_name new-feature
 ```
 
-For example to make a PR branch for https://github.com/stas00/git-tools, do:
+For example to make a PR branch for https://github.com/stas00/git-tools over ssh, do:
 ```
 ./github-make-pr-branch ssh your-github-username stas00 git-tools new-feature
 ```
