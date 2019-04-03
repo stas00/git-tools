@@ -2,9 +2,9 @@
 
 Various helper tools to working with git and github
 
-# github-make-pr-branch - auto-create a PR branch (includes forking if needed)
+# github-make-pr-branch - create a PR branch
 
-Creating a PR could involve many steps and they vary whether you do it for the first time, or subsequent times and when your forked master goes out of sync with the upstream master. This tool does all the work for you. It creates a PR branch for you, taking care of forking the upstream if needed, syncing your master if needed, setting up your branch for pushing, so all that remains is for you to do your work, commit changes and submit PR.
+Creating a github PullRequest (PR) could involve many steps and they vary whether you do it for the first time, or subsequent times and when your forked master goes out of sync with the upstream master. This tool does all the work for you. It creates a PR branch for you, taking care of forking the upstream if needed, syncing your master if needed, setting up your branch for pushing, so all that remains is for you to do your work, commit changes and submit a PR.
 
 To run it:
 

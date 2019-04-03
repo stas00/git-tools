@@ -89,7 +89,16 @@ if [[ "$was_already_forked" -eq 1 ]]; then
 else
     echo "$url doesn't exist - need to fork"
     check_curl_is_available
-    run "curl -u $fork_user https://api.github.com/repos/$repo_user/$repo_name/forks -d ''"
+    cmd="curl -X POST -u $fork_user https://api.github.com/repos/$repo_user/$repo_name/forks"
+    echo $cmd
+    out=$(eval "$cmd") || exit 1
+    #echo "got $out"
+    if [[ $out != *"full_name"* ]]; then
+        echo "failed to fork: $out"
+        exit 1
+    fi
+    echo "sleeping 10 sec to allow github to complete the fork"
+    sleep 10
 fi
 
 # support an already existing checkout if it matches the desired parameters, but only if it's not dirty
@@ -144,11 +153,13 @@ fi
 
 # set this branch's upstream, so to enable `git push` and other git
 # commands without needing to pass any more arguments.
-echo -e "\n\n*** Set this $new_branch_name's upstream to simplify push and alikes"
+echo -e "\n\n*** Set '$new_branch_name' branch's upstream to simplify push and alikes"
 run "git push --set-upstream origin $new_branch_name"
 
+echo -e "\n\n### Successfully created branch '$new_branch_name' ###\n\n"
+
 # give parting instructions
-echo -e "\n\n*** Next do: "
+echo -e "\n\n*** Next do: \n"
 # only suggest to chdir if we made a clone
 echo -e "1. Switch to the working dir:\n"
 if [[ "$clone_is_needed" -eq 1 ]]; then
@@ -157,7 +168,7 @@ else
     echo -e "cd .\n"
 fi
 echo -e "2. Validate you're on the right repo/branch:\n"
-echo -e "echo on repo: \$(git config --get remote.origin.url | sed 's|^.*//||; s/.*@//; s/[^:/]\+[:/]//; s/.git$//') branch: \$(git branch | sed -n '/\* /s///p')\n\n"
+echo -e "echo on repo: \$(git config --get remote.origin.url | sed 's|^.*//||; s/.*@//; s/[^:/]\+[:/]//; s/.git$//') branch: \$(git branch | sed -n '/\* /s///p')\n"
 echo -e "3. And do your work.\n"
 echo -e "4. When you're done:\n"
 echo -e "git add <newfiles> # if you added new files"
@@ -165,7 +176,7 @@ echo -e "git commit -a      # if you want to commit all modified/added files"
 echo -e "git push           # push files into $new_branch_name branch\n"
 echo -e "5. Then go to:\n"
 echo -e "  https://github.com/$fork_user/$repo_name/tree/$new_branch_name\n"
-echo "review your changes and when you're happy with what you see, submit your PR."
+echo -e "review your changes and when you're happy with what you see, submit your PR.\n"
 echo "While it's very good to review your PR on github before submitting it, if you want to use a CLI solution, there are several solutions to choose from:"
 echo "* https://github.com/github/hub"
 echo "* https://github.com/jd/git-pull-request"
