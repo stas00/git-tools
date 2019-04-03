@@ -1,9 +1,11 @@
+# github PR made easy
 
 <!--ts-->
 
 Table of Contents
 -----------------
 
+   * [github PR made easy](#github-pr-made-easy)
       * [Table of Contents](#table-of-contents)
       * [github-make-pr-branch tool](#github-make-pr-branch-tool)
       * [How to Make a Pull Request (PR)](#how-to-make-a-pull-request-pr)
@@ -19,8 +21,6 @@ Table of Contents
          * [How To Reset Your Forked Master Branch](#how-to-reset-your-forked-master-branch)
          * [Where am I?](#where-am-i)
 <!--te-->
-
-
 
 ## github-make-pr-branch tool
 
