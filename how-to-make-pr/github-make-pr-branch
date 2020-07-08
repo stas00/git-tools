@@ -83,9 +83,24 @@ url="$prefix$fork_user/$repo_name.git"
 # fork the repo if it hasn't been forked yet
 echo -e "\n\n*** Checking if we need to fork"
 was_already_forked=0
-git ls-remote $url >/dev/null 2>&1 && was_already_forked=1
-if [[ "$was_already_forked" -eq 1 ]]; then
-    echo "$url is already forked"
+repo_name_already_exists=0
+git ls-remote $url >/dev/null 2>&1 && repo_name_already_exists=1
+if [[ "$repo_name_already_exists" -eq 1 ]]; then
+    echo "$url already exists, checking for collision"
+    # the last html_url is the one of the fork origin (there are 6 of those in the response)
+    cmd="curl -s https://api.github.com/repos/$fork_user/$repo_name | grep html_url | tail -1"
+    echo $cmd
+    out=$(eval "$cmd") || exit 1
+    if [[ $out != *"$repo_user/$repo_name"* ]]; then
+        echo "Detected collision: there already exists a forked repo with the same name but originating from"
+        echo "$out"
+        echo "Either rename that pre-existing repo in github and then use this tool, or do the PR setup manually"
+        exit 1
+    else
+        was_already_forked=1
+        echo "$url is already forked"
+    fi
+
 else
     echo "$url doesn't exist - need to fork"
     check_curl_is_available
