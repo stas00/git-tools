@@ -274,7 +274,7 @@ If you work on several unrelated PRs, make different directories for each one, i
 
 ### How to Keep Your Feature Branch Up-to-date
 
-Normally you don't need to worry about updating your feature branch to synchronize with the `git-tools` code base (upstream master). The only time you must perform the update is when the same code you have been working on has undergone changes in the `master` branch. So when you submit a PR, github will tell you that there is a merge conflict.
+Normally you don't need to worry about updating your feature branch to synchronize with the `git-tools` code base (upstream master). The only time you must perform the update is when the same code you have been working on has undergone changes in the upstream `master` branch. So when you submit a PR, github will tell you that there is a merge conflict.
 
 You could update your feature branch directly, but it's best to update the master branch of your fork, first.
 
