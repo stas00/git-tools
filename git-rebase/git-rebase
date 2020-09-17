@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+
+if [ -n "$(git status -s)" ]; then
+    echo "You have uncommitted git files; either git stash or git commit them first"
+    exit 1
+fi
+
+cur_branch=$(git branch | sed -n '/\* /s///p')
+if [ "$cur_branch" = "master" ]; then
+    echo "This script expects you to be on the branch you need to rebase, but this is a 'master' branch"
+    echo "Exiting"
+    exit 1
+fi
+
+git fetch upstream
+git checkout master
+git merge --no-edit upstream/master
+git push --set-upstream origin master
+
+git checkout -
+git pull --rebase
+git merge origin/master
+
+echo "Now resolve conflicts if any, followed by git commit and finally git push"
