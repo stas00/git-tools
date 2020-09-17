@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# This is a little script that:
+# 1. syncs the upstream master with origin master
+# 2. and then rebases the current branch to upstream master using the merge strategy
+#
+# Usage:
+# git-rebase
+
 
 if [ -n "$(git status -s -uno)" ]; then
     echo "Error: you have uncommitted git files; either git stash or git commit them first"
