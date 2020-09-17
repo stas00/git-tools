@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-if [ -n "$(git status -s)" ]; then
+if [ -n "$(git status -s -uno)" ]; then
     echo "Error: you have uncommitted git files; either git stash or git commit them first"
     exit 1
 fi
