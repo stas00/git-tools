@@ -2,13 +2,13 @@
 
 
 if [ -n "$(git status -s)" ]; then
-    echo "You have uncommitted git files; either git stash or git commit them first"
+    echo "Error: you have uncommitted git files; either git stash or git commit them first"
     exit 1
 fi
 
 cur_branch=$(git branch | sed -n '/\* /s///p')
 if [ "$cur_branch" = "master" ]; then
-    echo "This script expects you to be on the branch you need to rebase, but this is a 'master' branch"
+    echo "Error: this script expects you to be on the branch you need to rebase, but this is a 'master' branch"
     echo "Exiting"
     exit 1
 fi
