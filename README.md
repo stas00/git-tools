@@ -7,3 +7,4 @@ Various helper tools for working with git and github:
 * [rebase/merge a local branch with origin master](./git-rebase/)
 * [git targets for Makefiles](./make/) 
 
+See also [other tools in my toolbox](https://github.com/stas00/toolbox).
