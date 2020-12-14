@@ -37,3 +37,9 @@ git-rebase
 git stash pop
 ```
 
+Note:
+
+I recently changed this script to automatically handle forked and non-forked branches. So I can just invoke `git-rebase` on any branch and not worry. 
+
+The issue is how to detect that correctly. Since I typically use [github-make-pr-branch](https://github.com/stas00/git-tools/blob/master/how-to-make-pr/github-make-pr-branch) for making branches, which nicely sets up a variety of things to make PRs easily, the script sets upstream for `git remote` - so if `git remote get-url upstream` is set in such branches, whereas in a normal non-forked branch there is no upstream. If you know of a more universal way to programmatically detect when we need to first merge upstream/master into origin/master and when not please let me know.
+

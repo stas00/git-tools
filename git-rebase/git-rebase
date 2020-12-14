@@ -20,12 +20,21 @@ if [ "$cur_branch" = "master" ]; then
     exit 1
 fi
 
-git fetch upstream
-git checkout master
-git merge --no-edit upstream/master
-git push --set-upstream origin master
+# my script github-make-pr-branch sets up upstream git remote, when creating a branch, so here we
+# know if we are in a branch of a forked repo and need to merge the forked master first. I'm not
+# sure how to do this check in a general way w/o having an explicit `upstream` set up
+if [ -n "$(git remote get-url upstream 2> /dev/null)" ]; then
+    echo "detected a fork, merging upstream/master into origin/master first"
+    git fetch upstream
+    git checkout master
+    git merge --no-edit upstream/master
+    git push --set-upstream origin master
+    git checkout -
+else
+    echo "detected non-forked repo, updating origin"
+    git fetch origin
+fi
 
-git checkout -
 git pull --rebase
 git merge origin/master
 
