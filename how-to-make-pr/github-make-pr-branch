@@ -48,29 +48,33 @@ function check_curl_is_available {
     command -v curl >/dev/null 2>&1 || { echo >&2 "$me requires 'curl' but it's not installed. Aborting."; exit 1; }
 }
 
+cmd="curl -s https://api.github.com/repos/${repo_user}/${repo_name} | jq --raw-output .default_branch"
+default_branch=$(eval "$cmd") || exit 1
+echo -e "\n\n*** Discovered default branch: $default_branch"
+
 function run() {
     local cmd="$@"
     echo "running: $cmd"
     eval $cmd || exit 1
 }
 
-function master_sync() {
+function default_branch_sync() {
     run "git fetch upstream"
-    run "git checkout master"
-    # XXX: this will fail if the user was committing directly to their forked `master` branch
-    cmd="git merge --no-edit upstream/master"
+    run "git checkout ${default_branch}"
+    # XXX: this will fail if the user was committing directly to their forked `default_branch` branch
+    cmd="git merge --no-edit upstream/${default_branch}"
     echo "running: $cmd"
-    eval $cmd || { git merge --abort; echo -e >&2 "\nError: $fork_user/$repo_name/master can't be merged with repo_user/$repo_name/master.\nYou must merge manually, or reset $fork_user/$repo_name/master.\nAborting."; exit 1; }
+    eval $cmd || { git merge --abort; echo -e >&2 "\nError: $fork_user/$repo_name/${default_branch} can't be merged with repo_user/$repo_name/${default_branch}.\nYou must merge manually, or reset $fork_user/$repo_name/${default_branch}.\nAborting."; exit 1; }
     run "git push"
 
-    # # XXX: here is how to reset the master branch of the fork
+    # # XXX: here is how to reset the default_branch branch of the fork
     # git remote add upstream git@github.com:$repo_user/$repo_name.git
     # git fetch upstream
-    # git update-ref refs/heads/master refs/remotes/upstream/master
-    # git checkout master
+    # git update-ref refs/heads/${default_branch} refs/remotes/upstream/${default_branch}
+    # git checkout ${default_branch}
     # git stash
-    # git reset --hard upstream/master
-    # git push origin master --force
+    # git reset --hard upstream/${default_branch}
+    # git push origin ${default_branch} --force
 }
 
 if [[ "$auth" == "ssh" ]]; then
@@ -146,10 +150,10 @@ run "git remote add upstream $orig_repo_url || echo 'already exists'"
 # show the setup
 run "git remote -v"
 
-# let's sync the forked repo master with the upstream master if it hasn't been just forked
+# let's sync the forked repo default_branch with the upstream default_branch if it hasn't been just forked
 if [[ "$was_already_forked" -eq 1 ]]; then
-    echo -e "\n\n*** Syncing $fork_user/master with $repo_user/master"
-    master_sync
+    echo -e "\n\n*** Syncing $fork_user/${default_branch} with $repo_user/${default_branch}"
+    default_branch_sync
     echo "Done"
 fi
 
