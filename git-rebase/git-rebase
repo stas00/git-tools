@@ -13,7 +13,7 @@ if [ -n "$(git status -s -uno)" ]; then
     exit 1
 fi
 
-repo_user_repo_name=$(git config --get remote.origin.url | sed 's|^.*//||; s/.*@//; s/[^:/]\+[:/]//; s/.git$//')
+repo_user_repo_name=$(git config --get remote.origin.url | sed 's|^.*//||; s/.*@//; s/[^:/]\+[:/]//; s/.git$//; s#/$##')
 cmd="curl -s https://api.github.com/repos/${repo_user_repo_name} | jq --raw-output .default_branch"
 default_branch=$(eval "$cmd") || exit 1
 echo -e "\n\n*** Discovered default branch: $default_branch"
