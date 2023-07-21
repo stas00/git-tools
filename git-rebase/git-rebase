@@ -14,7 +14,8 @@ if [ -n "$(git status -s -uno)" ]; then
 fi
 
 repo_user_repo_name=$(git config --get remote.origin.url | sed 's|^.*//||; s/.*@//; s/[^:/]\+[:/]//; s/.git$//; s#/$##')
-cmd="curl -s https://api.github.com/repos/${repo_user_repo_name} | jq --raw-output .default_branch"
+cmd="curl -ks https://api.github.com/repos/${repo_user_repo_name} | jq --raw-output .default_branch"
+echo $cmd
 default_branch=$(eval "$cmd") || exit 1
 if [[ $default_branch == "null" ]]; then
     echo "can't get default branch name, private repo use curl -u username:token -s ... instead"
